@@ -9,6 +9,7 @@ const Header = () => {
 
     useEffect(() => {
         getUserInfo();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const getUserInfo = async () => {

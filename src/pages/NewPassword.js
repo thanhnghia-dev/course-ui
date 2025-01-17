@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {TabTitle} from "../utils/DynamicTitle";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {Bounce, toast, ToastContainer} from "react-toastify"
 import {resetPassword} from "../service/UserService";
 

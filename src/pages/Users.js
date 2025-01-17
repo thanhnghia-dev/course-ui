@@ -18,6 +18,7 @@ const Users = () => {
     const [filteredUsers, setFilteredUsers] = useState([]);
 
     const [id, setId] = useState('');
+    // eslint-disable-next-line no-unused-vars
     const [userId, setUserId] = useState('');
     const [fullName, setFullName] = useState('');
     const [username, setUsername] = useState('');
@@ -234,6 +235,7 @@ const Users = () => {
 
     useEffect(() => {
         getUsers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {

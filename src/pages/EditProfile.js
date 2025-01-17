@@ -7,7 +7,6 @@ import {editProfile, fetchUserInfo} from "../service/UserService";
 import moment from "moment";
 import {Bounce, toast, ToastContainer} from "react-toastify";
 import {ClipLoader} from "react-spinners";
-import {Link} from "react-router-dom";
 
 const EditProfile = () => {
     TabTitle('Hồ sơ của tôi | Trung Tâm Tin Học LP');
@@ -26,12 +25,14 @@ const EditProfile = () => {
     });
 
     const [loadingAPI, setLoadingAPI] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     let [color, setColor] = useState("#ff8201");
 
     const accessToken = localStorage.getItem("access_token");
 
     useEffect(() => {
         getUserInfo();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const getUserInfo = async () => {

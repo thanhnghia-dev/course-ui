@@ -7,9 +7,7 @@ import DataTable from "react-data-table-component";
 import {Link} from "react-router-dom";
 import * as XLSX from "xlsx";
 import {createCourse, deleteCourse, fetchAllCourses, updateCourse} from "../service/CourseService";
-import moment from "moment";
 import {Bounce, toast, ToastContainer} from "react-toastify";
-import {createStudent} from "../service/StudentService";
 
 const Courses = () => {
     TabTitle('Quản lý Khóa học | Trung Tâm Tin Học LP');

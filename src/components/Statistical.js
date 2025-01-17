@@ -193,6 +193,7 @@ const Statistical = () => {
         getUsers()
         getUserInfo();
         getStudents();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

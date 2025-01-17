@@ -25,6 +25,7 @@ const NavigationBar = () => {
 
     useEffect(() => {
         getUserInfo();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleLogout = async () => {
@@ -94,6 +95,7 @@ const NavigationBar = () => {
 
                         <li className="label">Khác</li>
                         <li onClick={handleLogout} style={{ cursor: "pointer" }}>
+                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                             <a>
                                 <i className="ti-power-off"></i> Đăng xuất
                             </a>

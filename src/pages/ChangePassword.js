@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import NavigationBar from "../components/NavigationBar";
 import Footer from "../components/Footer";
 import {TabTitle} from "../utils/DynamicTitle";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {Bounce, toast, ToastContainer} from "react-toastify";
 import {changePassword} from "../service/UserService";
 

@@ -3,14 +3,13 @@ import Header from "../components/NavigationBar";
 import NavigationBar from "../components/Header";
 import {TabTitle} from "../utils/DynamicTitle";
 import Footer from "../components/Footer";
-import axios from "axios";
 import DataTable from "react-data-table-component";
 import {Link} from "react-router-dom";
 import * as XLSX from "xlsx";
 import {createClasses, deleteClass, fetchAllClasses, updateClass} from "../service/ClassService";
 import moment from "moment";
 import {Bounce, toast, ToastContainer} from "react-toastify";
-import {createCourse, fetchAllCourses} from "../service/CourseService";
+import {fetchAllCourses} from "../service/CourseService";
 
 const Classes = () => {
     TabTitle('Quản lý Lớp học | Trung Tâm Tin Học LP');

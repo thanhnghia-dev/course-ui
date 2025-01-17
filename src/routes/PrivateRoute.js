@@ -16,7 +16,7 @@ const PrivateRoute = ({ children }) => {
             localStorage.removeItem("expires_at");
             navigate("/sign-in", { replace: true });
         }
-    }, [navigate]);
+    }, [accessToken, expiresAt, navigate]);
 
     // Logout automotive when token is expired
     useEffect(() => {
@@ -33,7 +33,7 @@ const PrivateRoute = ({ children }) => {
 
             return () => clearTimeout(timeout);
         }
-    }, [navigate]);
+    }, [accessToken, expiresAt, navigate]);
 
     return localStorage.getItem("access_token") ? children : null;
 };
