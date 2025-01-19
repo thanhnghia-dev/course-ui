@@ -112,7 +112,7 @@ const Login = () => {
                                         />
 
                                         <div className="register-link m-t-15 text-center">
-                                            <p>Bạn chưa có tài khoản ? <Link to="/sign-up"> Đăng ký ngay</Link></p>
+                                            <p>Bạn chưa có tài khoản? <Link to="/sign-up"> Đăng ký ngay</Link></p>
                                         </div>
                                 </div>
                             </div>

@@ -138,7 +138,7 @@ const Register = () => {
                                         />
 
                                         <div className="register-link m-t-15 text-center">
-                                            <p>Bạn đã có tài khoản ? <Link to="/sign-in"> Đăng nhập</Link></p>
+                                            <p>Bạn đã có tài khoản? <Link to="/sign-in"> Đăng nhập</Link></p>
                                         </div>
                                 </div>
                             </div>
