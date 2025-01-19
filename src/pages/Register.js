@@ -59,7 +59,7 @@ const Register = () => {
                     }
                 });
             } else {
-                toast.error("Username đã tồn tại!");
+                toast.error("Tên đăng nhập đã tồn tại!");
             }
         } catch (error) {
             toast.error("Đã xảy ra lỗi hệ thống! Vui lòng thử lại sau!");

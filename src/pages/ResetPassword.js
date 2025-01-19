@@ -13,7 +13,7 @@ const ResetPassword = () => {
     // Send data
     const handleSend = async () => {
         if (!username) {
-            toast.error("Vui lòng nhập username!");
+            toast.error("Vui lòng nhập tên đăng nhập!");
             return;
         }
 
@@ -29,7 +29,7 @@ const ResetPassword = () => {
                     }
                 });
             } else {
-                toast.error("Username không tồn tại!");
+                toast.error("Tên đăng nhập không tồn tại!");
             }
         } catch (error) {
             toast.error("Đã xảy ra lỗi hệ thống! Vui lòng thử lại sau!");

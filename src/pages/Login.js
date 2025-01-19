@@ -24,7 +24,7 @@ const Login = () => {
     // Login to access into system
     const handleLogin = async () => {
         if (!username || !password) {
-            toast.error("Vui lòng nhập username hoặc mật khẩu!");
+            toast.error("Vui lòng nhập tên đăng nhập hoặc mật khẩu!");
             return;
         }
 
@@ -44,7 +44,7 @@ const Login = () => {
                     }
                 });
             } else {
-                toast.error("Email hoặc mật khẩu không đúng!");
+                toast.error("Tên đăng nhập hoặc mật khẩu không đúng!");
             }
         } catch (error) {
             toast.error("Đã xảy ra lỗi hệ thống! Vui lòng thử lại sau!");
