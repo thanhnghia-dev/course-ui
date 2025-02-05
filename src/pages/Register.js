@@ -3,6 +3,7 @@ import {TabTitle} from "../utils/DynamicTitle";
 import {Link, useNavigate} from "react-router-dom";
 import {Bounce, toast, ToastContainer} from "react-toastify";
 import {register} from "../service/AuthService";
+import {ClipLoader} from "react-spinners";
 
 const Register = () => {
     TabTitle('Đăng ký tài khoản');
@@ -15,6 +16,10 @@ const Register = () => {
     const [confPasswordError, setConfPasswordError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+
+    const [loadingAPI, setLoadingAPI] = useState(false);
+    // eslint-disable-next-line no-unused-vars
+    let [color, setColor] = useState("#ff8201");
 
     function handlePasswordChange(event) {
         const newPassword = event.target.value;
@@ -50,7 +55,9 @@ const Register = () => {
         }
 
         try {
-            let res = await register(fullName, username, password, "USER");
+            setLoadingAPI(true);
+
+            let res = await register(fullName, username, password, 2, "USER");
 
             if (res && res.message === "User registration was successful") {
                 toast.success("Đăng ký thành công!", {
@@ -64,6 +71,8 @@ const Register = () => {
         } catch (error) {
             toast.error("Đã xảy ra lỗi hệ thống! Vui lòng thử lại sau!");
             console.error(error);
+        } finally {
+            setLoadingAPI(false);
         }
     };
 
@@ -119,9 +128,22 @@ const Register = () => {
                                                 <label className="ml-2">Hiện mật khấu</label>
                                             </div>
                                         </div>
+                                        {loadingAPI && (
+                                            <div className="col-md-7 text-center align-content-center">
+                                                <ClipLoader
+                                                    color={color}
+                                                    loading={loadingAPI}
+                                                    size={30}
+                                                    aria-label="Loading Spinner"
+                                                    data-testid="loader"
+                                                />
+                                            </div>
+                                        )}
                                         <button type="submit"
                                                 className="btn btn-primary btn-flat m-b-30 m-t-30"
-                                                onClick={() => handleRegister()}>Đăng ký</button>
+                                                onClick={() => handleRegister()}
+                                                disabled={loadingAPI}>Đăng ký
+                                        </button>
 
                                         <ToastContainer
                                             position="top-right"

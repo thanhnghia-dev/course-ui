@@ -1,10 +1,11 @@
 import axios from "./CustomizeAxios";
 
-const register = (fullName, username, password, role) => {
+const register = (fullName, username, password, gender, role) => {
     const formData = new FormData();
     formData.append('fullName', fullName);
     formData.append('username', username);
     formData.append('password', password);
+    formData.append('gender', gender);
     formData.append('role', role);
 
     return axios.post('auth/register', formData, {

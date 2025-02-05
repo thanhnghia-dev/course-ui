@@ -4,6 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {Bounce, toast, ToastContainer} from "react-toastify";
 import {login} from "../service/AuthService";
 import {jwtDecode} from "jwt-decode";
+import {ClipLoader} from "react-spinners";
 
 const Login = () => {
     TabTitle('Đăng nhập');
@@ -12,6 +13,10 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+
+    const [loadingAPI, setLoadingAPI] = useState(false);
+    // eslint-disable-next-line no-unused-vars
+    let [color, setColor] = useState("#ff8201");
 
     useEffect(() => {
         const accessToken = localStorage.getItem("access_token");
@@ -29,6 +34,8 @@ const Login = () => {
         }
 
         try {
+            setLoadingAPI(true);
+
             let res = await login(username, password);
 
             if (res && res.message === "User login was successful") {
@@ -49,6 +56,8 @@ const Login = () => {
         } catch (error) {
             toast.error("Đã xảy ra lỗi hệ thống! Vui lòng thử lại sau!");
             console.error(error);
+        } finally {
+            setLoadingAPI(false);
         }
     }
 
@@ -92,9 +101,21 @@ const Login = () => {
                                                 <Link to="/reset-password">Quên mật khẩu?</Link>
                                             </label>
                                         </div>
+                                        {loadingAPI && (
+                                            <div className="col-md-7 text-center align-content-center">
+                                                <ClipLoader
+                                                    color={color}
+                                                    loading={loadingAPI}
+                                                    size={30}
+                                                    aria-label="Loading Spinner"
+                                                    data-testid="loader"
+                                                />
+                                            </div>
+                                        )}
                                         <button type="submit"
                                                 className="btn btn-primary btn-flat m-b-30 m-t-30"
-                                                onClick={() => handleLogin()}>Đăng nhập
+                                                onClick={() => handleLogin()}
+                                                disabled={loadingAPI}>Đăng nhập
                                         </button>
 
                                         <ToastContainer

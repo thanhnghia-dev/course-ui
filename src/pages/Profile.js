@@ -37,8 +37,10 @@ const Profile = () => {
     const getGender = ({gender}) => {
         if (gender === 1) {
             return 'Nam';
-        } else {
+        } else if (gender === 0) {
             return 'Nữ';
+        } else {
+            return 'Trống';
         }
     }
 
