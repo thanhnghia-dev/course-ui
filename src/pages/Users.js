@@ -9,6 +9,7 @@ import * as XLSX from 'xlsx';
 import {deleteUser, fetchAllUsers, updateUser} from "../service/UserService";
 import moment from "moment";
 import {Bounce, toast, ToastContainer} from "react-toastify";
+import {register} from "../service/AuthService";
 
 const Users = () => {
     TabTitle('Quản lý Người dùng | Trung Tâm Tin Học LP');
@@ -26,6 +27,9 @@ const Users = () => {
     const [gender, setGender] = useState('');
     const [role, setRole] = useState('');
     const [status, setStatus] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const accessToken = localStorage.getItem("access_token");
 
@@ -54,6 +58,47 @@ const Users = () => {
             }
         } else {
             console.error("Course not found");
+        }
+    };
+
+    function handlePasswordChange(event) {
+        const newPassword = event.target.value;
+        setPassword(newPassword);
+        if (!validatePassword(newPassword)) {
+            setPasswordError('Mật khẩu phải chứa ít nhất một chữ cái viết thường, ' +
+                'một chữ cái viết hoa, một ký tự đặc biệt và có ít nhất 8 ký tự.');
+        } else {
+            setPasswordError('');
+        }
+    }
+
+    function validatePassword(password) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return regex.test(password);
+    }
+
+    // Create a new account
+    const handleRegister = async () => {
+        if (!fullName || !username || !password) {
+            toast.warning("Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+        try {
+            let res = await register(fullName, username, password, 2, "USER");
+
+            if (res && res.message === "User registration was successful") {
+                toast.success("Tạo người dùng thành công!", {
+                    onClose: () => {
+                        window.location.reload();
+                    }
+                });
+            } else {
+                toast.error("Tên đăng nhập đã tồn tại!");
+            }
+        } catch (error) {
+            toast.error("Đã xảy ra lỗi hệ thống! Vui lòng thử lại sau!");
+            console.error(error);
         }
     };
 
@@ -116,8 +161,10 @@ const Users = () => {
     const getGender = ({gender}) => {
         if (gender === 1) {
             return "Nam";
-        } else {
+        } else if (gender === 0) {
             return "Nữ";
+        } else {
+            return "Trống";
         }
     };
 
@@ -296,8 +343,14 @@ const Users = () => {
                                             fixedHeader
                                             fixedHeaderScrollHeight="400px"
                                             highlightOnHover
-                                            actions={<button className="btn btn-success"
-                                                             onClick={handleOnExport}>Xuất File Excel</button>}
+                                            actions={
+                                                <div>
+                                                    <button className="btn btn-primary mr-3"
+                                                            data-toggle="modal" data-target="#add_user">Thêm người dùng</button>
+                                                    <button className="btn btn-success"
+                                                            onClick={handleOnExport}>Xuất File Excel</button>
+                                                </div>
+                                            }
                                             subHeader
                                             subHeaderAlign="left"
                                             subHeaderComponent={
@@ -315,6 +368,68 @@ const Users = () => {
                                 </div>
                             </div>
                         </section>
+
+                        <div id="add_user" className="modal fade" role="dialog">
+                            <div className="modal-dialog modal-dialog-centered">
+                                <div className="modal-content modal-lg">
+                                    <div className="modal-header">
+                                        <h4 className="modal-title">Thêm mới người dùng</h4>
+                                        <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div className="modal-body">
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="form-group">
+                                                    <label>Họ và tên</label>
+                                                    <input type="text" className="form-control" required
+                                                           value={fullName}
+                                                           onChange={(event) => {
+                                                               setFullName(event.target.value);
+                                                           }}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <div className="form-group">
+                                                    <label>Tên đăng nhập</label>
+                                                    <input type="text" className="form-control"
+                                                           value={username}
+                                                           onChange={(event) => {
+                                                               setUsername(event.target.value);
+                                                           }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Mật khẩu</label>
+                                            <input type={showPassword ? "text" : "password"}
+                                                   className="form-control" required
+                                                   value={password}
+                                                   onChange={handlePasswordChange}
+                                            />
+                                            {passwordError && <div className="mt-2" style={{ color: 'red' }}>{passwordError}</div>}
+                                        </div>
+                                        <div className="form-group">
+                                            <div className="checkbox">
+                                                <div className="pull-left">
+                                                    <input type="checkbox"
+                                                           checked={showPassword}
+                                                           onChange={() => setShowPassword(!showPassword)}
+                                                    />
+                                                    <label className="ml-2">Hiện mật khẩu</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="m-t-20 text-center">
+                                            <button className="btn btn-primary btn-lg"
+                                                    onClick={() => handleRegister()}>Tạo mới
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div id="edit_user" className="modal fade" role="dialog">
                             <div className="modal-dialog modal-dialog-centered">

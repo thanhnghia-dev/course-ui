@@ -29,7 +29,7 @@ const Login = () => {
     // Login to access into system
     const handleLogin = async () => {
         if (!username || !password) {
-            toast.error("Vui lòng nhập tên đăng nhập hoặc mật khẩu!");
+            toast.warning("Vui lòng nhập tên đăng nhập hoặc mật khẩu!");
             return;
         }
 
@@ -95,7 +95,7 @@ const Login = () => {
                                                        checked={showPassword}
                                                        onChange={() => setShowPassword(!showPassword)}
                                                 />
-                                                <label className="ml-2">Hiện mật khấu</label>
+                                                <label className="ml-2">Hiện mật khẩu</label>
                                             </div>
                                             <label className="pull-right">
                                                 <Link to="/reset-password">Quên mật khẩu?</Link>
@@ -131,10 +131,6 @@ const Login = () => {
                                             theme="colored"
                                             transition={Bounce}
                                         />
-
-                                        <div className="register-link m-t-15 text-center">
-                                            <p>Bạn chưa có tài khoản? <Link to="/sign-up"> Đăng ký ngay</Link></p>
-                                        </div>
                                 </div>
                             </div>
                         </div>

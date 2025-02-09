@@ -45,7 +45,7 @@ const NewPassword = () => {
     // Save change
     const handleSaveChange = async () => {
         if (!password || !confPassword) {
-            toast.error("Vui lòng điền đầy đủ thông tin!");
+            toast.warning("Vui lòng điền mật khẩu!");
             return;
         }
 
@@ -101,7 +101,7 @@ const NewPassword = () => {
                                                    checked={showPassword}
                                                    onChange={() => setShowPassword(!showPassword)}
                                                 />
-                                                <label className="ml-2">Hiện mật khấu</label>
+                                                <label className="ml-2">Hiện mật khẩu</label>
                                             </div>
                                         </div>
                                         <button type="submit"

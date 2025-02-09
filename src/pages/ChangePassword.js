@@ -50,7 +50,7 @@ const EditProfile = () => {
     // Save changes
     const handleSaveChange = async () => {
         if (!currentPassword || !newPassword || !confPassword) {
-            toast.error("Vui lòng nhập mật khẩu!");
+            toast.warning("Vui lòng nhập mật khẩu!");
             return;
         }
 
@@ -120,7 +120,7 @@ const EditProfile = () => {
                                                        checked={showPassword}
                                                        onChange={() => setShowPassword(!showPassword)}
                                                     />
-                                                <label className="ml-2">Hiện mật khấu</label>
+                                                <label className="ml-2">Hiện mật khẩu</label>
                                                 </div>
                                             </div>
                                             <button type="submit"

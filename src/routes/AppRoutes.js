@@ -1,7 +1,6 @@
 import React from "react";
 import {Route, Routes} from "react-router-dom";
 import Home from "../pages/Home";
-import Register from "../pages/Register";
 import Login from "../pages/Login";
 import ResetPassword from "../pages/ResetPassword";
 import Profile from "../pages/Profile";
@@ -18,7 +17,6 @@ import Error404 from "../pages/Error404";
 const AppRoutes = () => {
     return (
         <Routes>
-            <Route path="/sign-up" element={<Register />} />
             <Route path="/sign-in" element={<Login />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/new-password" element={<NewPassword />} />

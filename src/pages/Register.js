@@ -47,10 +47,10 @@ const Register = () => {
         return regex.test(password);
     }
 
-    // Sign in account
+    // Sign up account
     const handleRegister = async () => {
         if (!fullName || !username || !password || !confPassword) {
-            toast.error("Vui lòng điền đầy đủ thông tin!");
+            toast.warning("Vui lòng điền đầy đủ thông tin!");
             return;
         }
 

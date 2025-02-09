@@ -13,7 +13,7 @@ const ResetPassword = () => {
     // Send data
     const handleSend = async () => {
         if (!username) {
-            toast.error("Vui lòng nhập tên đăng nhập!");
+            toast.warning("Vui lòng nhập tên đăng nhập!");
             return;
         }
 
