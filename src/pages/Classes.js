@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import Header from "../components/NavigationBar";
 import NavigationBar from "../components/Header";
 import {TabTitle} from "../utils/DynamicTitle";
-import Footer from "../components/Footer";
 import DataTable from "react-data-table-component";
 import {Link} from "react-router-dom";
 import * as XLSX from "xlsx";
@@ -134,14 +133,29 @@ const Classes = () => {
         }
     }
 
+    // Normalize date-time to export file
+    const convertDateExp = ({date}) => {
+        const dateMoment = moment(date);
+        return dateMoment.format('MM/DD/YYYY');
+    }
+
     // Export file to Excel
     const handleOnExport = () => {
-        var wb = XLSX.utils.book_new(),
-            ws = XLSX.utils.json_to_sheet(classes);
+        const formattedData = classes.map((row, index) => ({
+            Stt: index + 1,
+            "Mã Lớp": row.classId,
+            "Tên Lớp": row.name,
+            "Ngày Thi": convertDateExp({ date: row.examDate }),
+            "Ngày Khai giảng": convertDateExp({ date: row.startDate }),
+            "Ngày Kết thúc": convertDateExp({ date: row.endDate }),
+        }));
 
-        XLSX.utils.book_append_sheet(wb, ws, "Khoa Hoc");
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(formattedData);
 
-        XLSX.writeFile(wb, "MyExcel.xlsx");
+        XLSX.utils.book_append_sheet(wb, ws, "Lop Hoc");
+
+        XLSX.writeFile(wb, "Danh_sach_lop_hoc.xlsx");
     }
 
     const convertDate = ({date}) => {
@@ -269,7 +283,7 @@ const Classes = () => {
 
                         </div>
 
-                        <section id="main-content" style={{ height: "100vh" }}>
+                        <section id="main-content">
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="card">
@@ -512,8 +526,6 @@ const Classes = () => {
                         </div>
                     </div>
                 </div>
-
-                <Footer/>
             </div>
 
             <ToastContainer

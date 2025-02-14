@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import Header from "../components/NavigationBar";
 import NavigationBar from "../components/Header";
 import {TabTitle} from "../utils/DynamicTitle";
-import Footer from "../components/Footer";
 import DataTable from "react-data-table-component";
 import {Link} from "react-router-dom";
 import * as XLSX from 'xlsx';
@@ -51,7 +50,7 @@ const Students = () => {
 
     // Save a new student
     const handleSave = async () => {
-        if (!firstName || !lastName || !phone || !dob || !birthPlace || !note) {
+        if (!firstName || !lastName || !phone || !dob || !birthPlace || !note || gender === "default") {
             toast.error("Vui lòng điền đầy đủ thông tin!");
             return;
         }
@@ -67,6 +66,7 @@ const Students = () => {
             setDob('');
             setBirthPlace('');
             setNote('');
+            setGender("default");
 
             setFilteredStudents((prevStudents) => [
                 ...prevStudents,
@@ -116,9 +116,15 @@ const Students = () => {
 
     // Update a student
     const handleUpdate = async () => {
-        const formattedDob = new Date(dob).toISOString().split('.')[0];
+        if (!firstName || !lastName || !phone || !dob || !birthPlace || !note || gender === "default") {
+            toast.error("Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
 
-        let res = await updateStudent(id, classId, lastName, firstName, phone, formattedDob, birthPlace, gender, note, status);
+        const formattedDob = new Date(dob).toISOString().split('.')[0];
+        const formattedGender = Number(gender);
+
+        let res = await updateStudent(id, classId, lastName, firstName, phone, formattedDob, birthPlace, formattedGender, note, status);
 
         if (res && id) {
             setFilteredStudents((prevStudents) =>
@@ -132,7 +138,7 @@ const Students = () => {
                             phoneNumber: phone,
                             dob: formattedDob,
                             birthPlace,
-                            gender,
+                            gender: formattedGender,
                             note,
                             status,
                         }
@@ -155,8 +161,6 @@ const Students = () => {
                 prevStudents.filter((student) => student.id !== id)
             );
 
-            console.log("Danh sách học viên sau khi xóa:", filteredStudents); // Kiểm tra dữ liệu
-
             toast.success("Xóa thành công!");
         } else {
             toast.error("Xóa thất bại!");
@@ -178,7 +182,7 @@ const Students = () => {
             Stt: index + 1,
             "Họ": row.lastName,
             "Tên": row.firstName,
-            "Ngày sinh": convertDate({ date: row.dob }),
+            "Ngày sinh": convertDateExp({ date: row.dob }),
             "Nơi sinh": row.birthPlace,
             "G.tính": getGender(row),
             "Điện thoại": row.phoneNumber,
@@ -199,14 +203,14 @@ const Students = () => {
         return dateMoment.format('DD/MM/YYYY');
     }
 
-    const getGender = ({gender}) => {
-        if (gender === 1) {
-            return "Nam";
-        } else if (gender === 0) {
-            return "Nữ";
-        } else {
-            return "Khác";
-        }
+    // Normalize date-time to export file
+    const convertDateExp = ({date}) => {
+        const dateMoment = moment(date);
+        return dateMoment.format('MM/DD/YYYY');
+    }
+
+    const getGender = ({ gender }) => {
+        return gender === 1 ? "Nam" : gender === 0 ? "Nữ" : "Khác";
     };
 
     const getStatus = (item) => {
@@ -362,7 +366,7 @@ const Students = () => {
 
                         </div>
 
-                        <section id="main-content" style={{ height: "100vh" }}>
+                        <section id="main-content">
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="col-lg-3">
@@ -498,7 +502,7 @@ const Students = () => {
                                                         <select
                                                             className="form-control select"
                                                             value={gender}
-                                                            onChange={(event) => setGender(event.target.value)}>
+                                                            onChange={(event) => setGender(Number(event.target.value))}>
                                                             <option value="default">---Chọn giới tính---</option>
                                                             <option value={1}>Nam</option>
                                                             <option value={0}>Nữ</option>
@@ -701,7 +705,6 @@ const Students = () => {
                     </div>
                 </div>
 
-                <Footer/>
             </div>
 
             <ToastContainer

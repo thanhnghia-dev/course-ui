@@ -94,12 +94,18 @@ const Courses = () => {
 
     // Export file to Excel
     const handleOnExport = () => {
-        var wb = XLSX.utils.book_new(),
-            ws = XLSX.utils.json_to_sheet(courses);
+        const formattedData = courses.map((row, index) => ({
+            Stt: index + 1,
+            "Mã Khóa học": row.courseId,
+            "Tên Khóa học": row.name,
+        }));
+
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(formattedData);
 
         XLSX.utils.book_append_sheet(wb, ws, "Khoa Hoc");
 
-        XLSX.writeFile(wb, "MyExcel.xlsx");
+        XLSX.writeFile(wb, "Danh_sach_khoa_hoc.xlsx");
     }
 
     const columns = [
@@ -194,7 +200,7 @@ const Courses = () => {
 
                         </div>
 
-                        <section id="main-content" style={{ height: "100vh" }}>
+                        <section id="main-content">
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="card">
@@ -330,8 +336,6 @@ const Courses = () => {
                         </div>
                     </div>
                 </div>
-
-                <Footer/>
             </div>
 
             <ToastContainer

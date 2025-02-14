@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import Header from "../components/NavigationBar";
 import NavigationBar from "../components/Header";
 import {TabTitle} from "../utils/DynamicTitle";
-import Footer from "../components/Footer";
 import DataTable from "react-data-table-component";
 import {Link} from "react-router-dom";
 import * as XLSX from 'xlsx';
@@ -140,7 +139,7 @@ const Users = () => {
             Stt: index + 1,
             "ID": row.userId,
             "Họ và tên": row.fullName,
-            "Ngày sinh": convertDate({ date: row.dob }),
+            "Ngày sinh": convertDateExp({ date: row.dob }),
             "G.tính": getGender(row),
             "Vai trò": getRole(row),
         }));
@@ -153,9 +152,16 @@ const Users = () => {
         XLSX.writeFile(wb, "Danh_sach_nguoi_dung.xlsx");
     }
 
+    // Normalize date-time
     const convertDate = ({date}) => {
         const dateMoment = moment(date);
         return dateMoment.format('DD/MM/YYYY');
+    }
+
+    // Normalize date-time to export file
+    const convertDateExp = ({date}) => {
+        const dateMoment = moment(date);
+        return dateMoment.format('MM/DD/YYYY');
     }
 
     const getGender = ({gender}) => {
@@ -330,7 +336,7 @@ const Users = () => {
 
                         </div>
 
-                        <section id="main-content" style={{ height: "100vh" }}>
+                        <section id="main-content">
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="card">
@@ -543,8 +549,6 @@ const Users = () => {
                         </div>
                     </div>
                 </div>
-
-                <Footer/>
             </div>
 
             <ToastContainer

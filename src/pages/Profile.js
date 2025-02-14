@@ -56,7 +56,7 @@ const Profile = () => {
             <NavigationBar/>
 
             <div className="content-wrap">
-                <div className="main">
+                <div className="main" style={{height: '100vh'}}>
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-lg-8 p-r-0 title-margin-right">
