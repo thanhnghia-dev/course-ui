@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import Header from "../components/NavigationBar";
 import NavigationBar from "../components/Header";
 import {TabTitle} from "../utils/DynamicTitle";
-import Footer from "../components/Footer";
 import DataTable from "react-data-table-component";
 import {Link} from "react-router-dom";
 import * as XLSX from "xlsx";

@@ -51,7 +51,7 @@ const Students = () => {
     // Save a new student
     const handleSave = async () => {
         if (!firstName || !lastName || !phone || !dob || !birthPlace || !note || gender === "default") {
-            toast.error("Vui lòng điền đầy đủ thông tin!");
+            toast.warning("Vui lòng điền đầy đủ thông tin!");
             return;
         }
 
@@ -59,7 +59,9 @@ const Students = () => {
 
         let res = await createStudent(lastName, firstName, phone, formattedDob, birthPlace, gender, classId, note);
 
-        if (res && res.id) {
+        if (res && res.status === 400) {
+            toast.error("Học viên đã tồn tại!");
+        } else if (res && res.id) {
             setLastName('');
             setFirstName('');
             setPhone('');
@@ -117,7 +119,7 @@ const Students = () => {
     // Update a student
     const handleUpdate = async () => {
         if (!firstName || !lastName || !phone || !dob || !birthPlace || !note || gender === "default") {
-            toast.error("Vui lòng điền đầy đủ thông tin!");
+            toast.warning("Vui lòng điền đầy đủ thông tin!");
             return;
         }
 

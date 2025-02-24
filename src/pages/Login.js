@@ -39,7 +39,7 @@ const Login = () => {
             let res = await login(username, password);
 
             if (res && res.status === 403) {
-                toast.error("Tài khoản đã bị ngừng hoạt động! Vui lòng liên hệ quản trị viên!");
+                toast.error("Tài khoản đã bị khóa! Vui lòng liên hệ quản trị viên!");
             } else if (res && res.message === "User login was successful") {
                 const decodedToken = jwtDecode(res.access_token);
                 const expiresAt = decodedToken.exp * 1000;
