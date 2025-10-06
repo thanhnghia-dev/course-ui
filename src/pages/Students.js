@@ -30,6 +30,7 @@ const Students = () => {
     const [dob, setDob] = useState('');
     const [birthPlace, setBirthPlace] = useState('');
     const [gender, setGender] = useState('');
+    const [citizenId, setCitizenId] = useState('');
     const [classId, setClassId] = useState(null);
     const [note, setNote] = useState('');
     const [status, setStatus] = useState('');
@@ -50,14 +51,16 @@ const Students = () => {
 
     // Save a new student
     const handleSave = async () => {
-        if (!firstName || !lastName || !phone || !dob || !birthPlace || !note || gender === "default") {
+        if (!firstName || !lastName || !phone || !dob ||
+            !birthPlace || !citizenId || !note || gender === "default") {
             toast.warning("Vui lòng điền đầy đủ thông tin!");
             return;
         }
 
         const formattedDob = new Date(dob).toISOString().split('.')[0];
 
-        let res = await createStudent(lastName, firstName, phone, formattedDob, birthPlace, gender, classId, note);
+        let res = await createStudent(lastName, firstName, phone, formattedDob,
+                                                        birthPlace, gender, citizenId, classId, note);
 
         if (res && res.status === 400) {
             toast.error("Học viên đã tồn tại!");
@@ -67,6 +70,7 @@ const Students = () => {
             setPhone('');
             setDob('');
             setBirthPlace('');
+            setCitizenId('');
             setNote('');
             setGender("default");
 
@@ -102,6 +106,7 @@ const Students = () => {
             setPhone(student.phoneNumber);
             setBirthPlace(student.birthPlace);
             setGender(student.gender);
+            setBirthPlace(student.citizenId);
             setNote(student.note);
             setStatus(student.status);
             setClassId(student.classroom ? student.classroom.id : null);
@@ -118,7 +123,8 @@ const Students = () => {
 
     // Update a student
     const handleUpdate = async () => {
-        if (!firstName || !lastName || !phone || !dob || !birthPlace || !note || gender === "default") {
+        if (!firstName || !lastName || !phone || !dob ||
+            !birthPlace || !citizenId || !note || gender === "default") {
             toast.warning("Vui lòng điền đầy đủ thông tin!");
             return;
         }
@@ -126,7 +132,8 @@ const Students = () => {
         const formattedDob = new Date(dob).toISOString().split('.')[0];
         const formattedGender = Number(gender);
 
-        let res = await updateStudent(id, classId, lastName, firstName, phone, formattedDob, birthPlace, formattedGender, note, status);
+        let res = await updateStudent(id, classId, lastName, firstName, phone, formattedDob,
+                                                        birthPlace, formattedGender, citizenId, note, status);
 
         if (res && id) {
             setFilteredStudents((prevStudents) =>
@@ -140,6 +147,7 @@ const Students = () => {
                             phoneNumber: phone,
                             dob: formattedDob,
                             birthPlace,
+                            citizenId,
                             gender: formattedGender,
                             note,
                             status,
@@ -188,6 +196,7 @@ const Students = () => {
             "Nơi sinh": row.birthPlace,
             "G.tính": getGender(row),
             "Điện thoại": row.phoneNumber,
+            "Số CCCD": row.citizenId,
             "Ghi chú": row.note,
         }));
 
@@ -266,6 +275,12 @@ const Students = () => {
             selector: (row) => row.phoneNumber,
             wrap: true,
             width: "110px",
+        },
+        {
+            name: "Số CCCD",
+            selector: (row) => row.citizenId,
+            wrap: true,
+            width: "120px",
         },
         {
             name: "Ghi chú",
@@ -513,18 +528,35 @@ const Students = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <input type="text" className="form-control" hidden value={classId}/>
-                                                <div className="form-group">
-                                                    <label>Ghi chú</label>
-                                                    <input type="text" className="form-control" required
-                                                           placeholder="VD: ok/ Thiếu CCCD + Hình..."
-                                                           value={note}
-                                                           onChange={(event) => {
-                                                               setNote(event.target.value);
-                                                           }}
-                                                    />
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <div className="form-group">
+                                                        <label>Số CCCD</label>
+                                                        <input type="text" className="form-control" required
+                                                               placeholder="VD: 075xxxxxxxxx"
+                                                               value={citizenId}
+                                                               onChange={(event) => {
+                                                                   setCitizenId(event.target.value);
+                                                               }}
+                                                        />
+                                                    </div>
                                                 </div>
+                                                <div className="col-sm-6">
+                                                    <input type="text" className="form-control" hidden value={classId}/>
+                                                    <div className="form-group">
+                                                        <label>Ghi chú</label>
+                                                        <input type="text" className="form-control" required
+                                                               placeholder="VD: ok/ Thiếu CCCD + Hình..."
+                                                               value={note}
+                                                               onChange={(event) => {
+                                                                   setNote(event.target.value);
+                                                               }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+
                                             </div>
                                             <div className="m-t-5 text-center">
                                                 <button className="btn btn-primary btn-lg mb-3"
@@ -628,6 +660,33 @@ const Students = () => {
                                             <div className="row">
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
+                                                        <label>Số CCCD</label>
+                                                        <input type="text" className="form-control" required
+                                                               placeholder="VD: 075xxxxxxxxx"
+                                                               value={citizenId}
+                                                               onChange={(event) => {
+                                                                   setCitizenId(event.target.value);
+                                                               }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <input type="text" className="form-control" hidden value={classId}/>
+                                                    <div className="form-group">
+                                                        <label>Ghi chú</label>
+                                                        <input type="text" className="form-control" required
+                                                               placeholder="VD: ok/ Thiếu CCCD + Hình..."
+                                                               value={note}
+                                                               onChange={(event) => {
+                                                                   setNote(event.target.value);
+                                                               }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <div className="form-group">
                                                         <label>Lớp học</label>
                                                         <select
                                                             className="form-control select"
@@ -658,19 +717,6 @@ const Students = () => {
                                                             <option value={3}>Nghỉ học ngang</option>
                                                         </select>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <input type="text" className="form-control" hidden value={classId}/>
-                                                <div className="form-group">
-                                                    <label>Ghi chú</label>
-                                                    <input type="text" className="form-control" required
-                                                           placeholder="VD: ok/ Thiếu CCCD + Hình..."
-                                                           value={note}
-                                                           onChange={(event) => {
-                                                               setNote(event.target.value);
-                                                           }}
-                                                    />
                                                 </div>
                                             </div>
                                             <div className="m-t-5 text-center">
