@@ -8,12 +8,12 @@ const fetchAllStudentsByClass = (classId) => {
     return axios.get(`public/students/by-class?classId=${classId}`);
 }
 
-const createStudent = (lastName, firstName, phoneNumber, dob, birthPlace, gender, citizenId, classId, note) => {
+const createStudent = (lastName, firstName, dob, phoneNumber, birthPlace, gender, citizenId, classId, note) => {
     const formData = new FormData();
     formData.append('lastName', lastName);
     formData.append('firstName', firstName);
-    formData.append('phoneNumber', phoneNumber);
     formData.append('dob', dob);
+    formData.append('phoneNumber', phoneNumber);
     formData.append('birthPlace', birthPlace);
     formData.append('gender', gender);
     formData.append('citizenId', citizenId);
@@ -27,14 +27,14 @@ const createStudent = (lastName, firstName, phoneNumber, dob, birthPlace, gender
     });
 }
 
-const updateStudent = (id, classId, lastName, firstName, phoneNumber, dob, birthPlace, gender, citizenId, note, status) => {
+const updateStudent = (id, classId, lastName, firstName, dob, phoneNumber, birthPlace, gender, citizenId, note, status) => {
     const formData = new FormData();
     formData.append('id', id);
     formData.append('classId', classId);
     formData.append('lastName', lastName);
     formData.append('firstName', firstName);
-    formData.append('phoneNumber', phoneNumber);
     formData.append('dob', dob);
+    formData.append('phoneNumber', phoneNumber);
     formData.append('birthPlace', birthPlace);
     formData.append('gender', gender);
     formData.append('citizenId', citizenId);

@@ -26,8 +26,8 @@ const Students = () => {
     const [id, setId] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [phone, setPhone] = useState('');
     const [dob, setDob] = useState('');
+    const [phone, setPhone] = useState('');
     const [birthPlace, setBirthPlace] = useState('');
     const [gender, setGender] = useState('');
     const [citizenId, setCitizenId] = useState('');
@@ -59,7 +59,7 @@ const Students = () => {
 
         const formattedDob = new Date(dob).toISOString().split('.')[0];
 
-        let res = await createStudent(lastName, firstName, phone, formattedDob,
+        let res = await createStudent(lastName, firstName, formattedDob, phone,
                                                         birthPlace, gender, citizenId, classId, note);
 
         if (res && res.status === 400) {
@@ -67,8 +67,8 @@ const Students = () => {
         } else if (res && res.id) {
             setLastName('');
             setFirstName('');
-            setPhone('');
             setDob('');
+            setPhone('');
             setBirthPlace('');
             setCitizenId('');
             setNote('');
@@ -81,8 +81,8 @@ const Students = () => {
                     studentId: res.studentId,
                     lastName,
                     firstName,
-                    phoneNumber: phone,
                     dob: formattedDob,
+                    phoneNumber: phone,
                     birthPlace,
                     gender,
                     note,
@@ -132,7 +132,7 @@ const Students = () => {
         const formattedDob = new Date(dob).toISOString().split('.')[0];
         const formattedGender = Number(gender);
 
-        let res = await updateStudent(id, classId, lastName, firstName, phone, formattedDob,
+        let res = await updateStudent(id, classId, lastName, firstName, formattedDob, phone,
                                                         birthPlace, formattedGender, citizenId, note, status);
 
         if (res && id) {
@@ -144,8 +144,8 @@ const Students = () => {
                             classId,
                             lastName,
                             firstName,
-                            phoneNumber: phone,
                             dob: formattedDob,
+                            phoneNumber: phone,
                             birthPlace,
                             citizenId,
                             gender: formattedGender,
@@ -226,7 +226,7 @@ const Students = () => {
 
     const getStatus = (item) => {
         if (item.status === 1) {
-            return <span className="badge badge-warning" style={{ padding: '5px' }}>Đang học</span>;
+            return <span className="badge badge-primary" style={{ padding: '5px' }}>Đang học</span>;
         } else if (item.status === 2) {
             return <span className="badge badge-success" style={{ padding: '5px' }}>Hoàn thành</span>;
         } else {
@@ -478,23 +478,23 @@ const Students = () => {
                                             <div className="row">
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
-                                                        <label>Số điện thoại</label>
-                                                        <input type="tel" className="form-control" required
-                                                               placeholder="VD: 0989xxxx25"
-                                                               value={phone}
+                                                        <label>Ngày sinh</label>
+                                                        <input type="date" className="form-control" required
+                                                               value={dob}
                                                                onChange={(event) => {
-                                                                   setPhone(event.target.value);
+                                                                   setDob(event.target.value);
                                                                }}
                                                         />
                                                     </div>
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
-                                                        <label>Ngày sinh</label>
-                                                        <input type="date" className="form-control" required
-                                                               value={dob}
+                                                        <label>Số điện thoại</label>
+                                                        <input type="tel" className="form-control" required
+                                                               placeholder="VD: 0989xxxx25"
+                                                               value={phone}
                                                                onChange={(event) => {
-                                                                   setDob(event.target.value);
+                                                                   setPhone(event.target.value);
                                                                }}
                                                         />
                                                     </div>
@@ -607,23 +607,23 @@ const Students = () => {
                                             <div className="row">
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
-                                                        <label>Số điện thoại</label>
-                                                        <input type="tel" className="form-control" required
-                                                               placeholder="VD: 0989xxxx25"
-                                                               value={phone}
+                                                        <label>Ngày sinh</label>
+                                                        <input type="date" className="form-control" required
+                                                               value={dob}
                                                                onChange={(event) => {
-                                                                   setPhone(event.target.value);
+                                                                   setDob(event.target.value);
                                                                }}
                                                         />
                                                     </div>
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
-                                                        <label>Ngày sinh</label>
-                                                        <input type="date" className="form-control" required
-                                                               value={dob}
+                                                        <label>Số điện thoại</label>
+                                                        <input type="tel" className="form-control" required
+                                                               placeholder="VD: 0989xxxx25"
+                                                               value={phone}
                                                                onChange={(event) => {
-                                                                   setDob(event.target.value);
+                                                                   setPhone(event.target.value);
                                                                }}
                                                         />
                                                     </div>

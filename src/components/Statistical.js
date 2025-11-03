@@ -78,7 +78,7 @@ const Statistical = () => {
 
     const getStudentStatus = (item) => {
         if (item.status === 1) {
-            return <span className="badge badge-warning" style={{ padding: '5px' }}>Đang học</span>;
+            return <span className="badge badge-primary" style={{ padding: '5px' }}>Đang học</span>;
         } else if (item.status === 2) {
             return <span className="badge badge-success" style={{ padding: '5px' }}>Hoàn thành</span>;
         } else {
