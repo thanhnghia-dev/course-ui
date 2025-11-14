@@ -106,7 +106,7 @@ const Students = () => {
             setPhone(student.phoneNumber);
             setBirthPlace(student.birthPlace);
             setGender(student.gender);
-            setBirthPlace(student.citizenId);
+            setCitizenId(student.citizenId);
             setNote(student.note);
             setStatus(student.status);
             setClassId(student.classroom ? student.classroom.id : null);
