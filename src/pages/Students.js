@@ -178,15 +178,12 @@ const Students = () => {
     }
 
     // Export file to Excel
-    const handleOnExport = () => {
-        const sortColumn = "firstName";
-        const sortOrder = "asc";
+    const convertDateExp = ({ date }) => new Date(date);
 
-        const sortedStudents = [...students].sort((a, b) => {
-            if (a[sortColumn] < b[sortColumn]) return sortOrder === "asc" ? -1 : 1;
-            if (a[sortColumn] > b[sortColumn]) return sortOrder === "asc" ? 1 : -1;
-            return 0;
-        });
+    const handleOnExport = () => {
+        const sortedStudents = [...students].sort((a, b) =>
+            a.firstName.localeCompare(b.firstName)
+        );
 
         const formattedData = sortedStudents.map((row, index) => ({
             Stt: index + 1,
@@ -201,23 +198,24 @@ const Students = () => {
         }));
 
         const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.json_to_sheet(formattedData);
-        const classroomName = students[0]?.classroom?.name || "Unknown Classroom";
 
-        XLSX.utils.book_append_sheet(wb, ws, "Hoc Vien");
-        XLSX.writeFile(wb, "DSHV_" + classroomName + ".xlsx");
+        const ws = XLSX.utils.json_to_sheet(formattedData, { cellDates: true });
+
+        Object.keys(ws).forEach((key) => {
+            if (key.startsWith("D") && ws[key].t === "d") {
+                ws[key].z = "dd/mm/yyyy";
+            }
+        });
+
+        const classroomName = students[0]?.classroom?.name || "Unknown Classroom";
+        XLSX.utils.book_append_sheet(wb, ws, "234CB");
+        XLSX.writeFile(wb, "DS DANG KY THI " + classroomName + ".xlsx");
     };
 
     // Normalize date-time
     const convertDate = ({date}) => {
         const dateMoment = moment(date);
         return dateMoment.format('DD/MM/YYYY');
-    }
-
-    // Normalize date-time to export file
-    const convertDateExp = ({date}) => {
-        const dateMoment = moment(date);
-        return dateMoment.format('MM/DD/YYYY');
     }
 
     const getGender = ({ gender }) => {

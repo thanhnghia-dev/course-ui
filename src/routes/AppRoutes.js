@@ -20,7 +20,6 @@ const AppRoutes = () => {
             <Route path="/sign-in" element={<Login />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/new-password" element={<NewPassword />} />
-            <Route path="/error-404" element={<Error404/>}/>
 
             <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
             <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
@@ -31,6 +30,8 @@ const AppRoutes = () => {
             <Route path="/courses" element={<PrivateRoute><Courses /></PrivateRoute>} />
             <Route path="/classes" element={<PrivateRoute><Classes /></PrivateRoute>} />
             <Route path="/students" element={<PrivateRoute><Students /></PrivateRoute>} />
+
+            <Route path="*" element={<Error404 />} />
         </Routes>
     );
 }
