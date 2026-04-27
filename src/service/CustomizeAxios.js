@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'https://course-server.up.railway.app/api/v1/'
+    baseURL: 'https://course-server-ot8a.onrender.com/api/v1/'
 });
 
 // Add a response interceptor
