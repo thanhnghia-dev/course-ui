@@ -198,8 +198,31 @@ const Students = () => {
         }));
 
         const wb = XLSX.utils.book_new();
+        
+        const ws = XLSX.utils.aoa_to_sheet([]);
+        
+        const classroomName = students[0]?.classroom?.name || "Unknown Classroom";
 
-        const ws = XLSX.utils.json_to_sheet(formattedData, { cellDates: true });
+        // Delete invalid text and character
+        const safeClassroomName = classroomName
+            .replace("Cơ bản ", "")
+            .replaceAll("/", "-");
+
+        // Add title
+        ws["A1"] = {
+            v: `DANH SÁCH ĐĂNG KÝ THI CHỨNG CHỈ UDCNTT CƠ BẢN\nNgày thi: ${safeClassroomName}`,
+            t: "s",
+            s: {
+                alignment: {
+                    wrapText: true,
+                },
+            },
+        };
+
+        XLSX.utils.sheet_add_json(ws, formattedData, {
+            origin: "A3",
+            cellDates: true,
+        });
 
         Object.keys(ws).forEach((key) => {
             if (key.startsWith("D") && ws[key].t === "d") {
@@ -207,9 +230,14 @@ const Students = () => {
             }
         });
 
-        const classroomName = students[0]?.classroom?.name || "Unknown Classroom";
-        XLSX.utils.book_append_sheet(wb, ws, "234CB");
-        XLSX.writeFile(wb, "DS DANG KY THI " + classroomName + ".xlsx");
+        const sheetName = `${students.length}CB`;
+
+        XLSX.utils.book_append_sheet(wb, ws, sheetName);
+
+        XLSX.writeFile(
+            wb,
+            `DS ${students.length}CB DANG KY THI ${safeClassroomName}.xlsx`
+        );
     };
 
     // Normalize date-time
