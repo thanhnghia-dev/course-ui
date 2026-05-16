@@ -49,52 +49,96 @@ const Students = () => {
         }
     }
 
+    // Reset form
+    const resetForm = () => {
+        setId('');
+        setFirstName('');
+        setLastName('');
+        setDob('');
+        setPhone('');
+        setBirthPlace('');
+        setGender("default");
+        setCitizenId('');
+        setNote('');
+        setStatus('');
+    };
+
     // Save a new student
-    const handleSave = async () => {
-        if (!firstName || !lastName || !phone || !dob ||
-            !birthPlace || !citizenId || !note || gender === "default") {
+    const handleSave = async (e) => {
+        e.preventDefault();
+
+        if (!firstName || !lastName || !dob || !note || gender === "default") {
             toast.warning("Vui lòng điền đầy đủ thông tin!");
             return;
         }
 
-        const formattedDob = new Date(dob).toISOString().split('.')[0];
+        try {
 
-        let res = await createStudent(lastName, firstName, formattedDob, phone,
-                                                        birthPlace, gender, citizenId, classId, note);
+            const formattedDob = new Date(dob)
+                .toISOString()
+                .split('.')[0];
 
-        if (res && res.status === 400) {
-            toast.error("Học viên đã tồn tại!");
-        } else if (res && res.id) {
-            setLastName('');
-            setFirstName('');
-            setDob('');
-            setPhone('');
-            setBirthPlace('');
-            setCitizenId('');
-            setNote('');
-            setGender("default");
+            const formattedGender = Number(gender);
 
-            setFilteredStudents((prevStudents) => [
-                ...prevStudents,
-                {
+            let res = await createStudent(
+                lastName,
+                firstName,
+                formattedDob,
+                phone,
+                birthPlace,
+                formattedGender,
+                citizenId,
+                classId,
+                note
+            );
+
+            if (res && res.status === 400) {
+                toast.error("Học viên đã tồn tại!");
+                return;
+            }
+
+            if (res && res.id) {
+
+                const newStudent = {
                     id: res.id,
                     studentId: res.studentId,
                     lastName,
                     firstName,
+                    fullName: `${lastName} ${firstName}`,
                     dob: formattedDob,
                     phoneNumber: phone,
                     birthPlace,
-                    gender,
+                    gender: formattedGender,
+                    citizenId,
                     note,
                     status: 1,
-                },
-            ]);
+                    classroom: {
+                        id: classId,
+                    },
+                };
 
-            toast.success("Tạo học viên thành công!");
-        } else {
-            toast.error("Tạo học viên thất bại!");
+                // update table
+                setStudents((prev) => [...prev, newStudent]);
+
+                setFilteredStudents((prev) => [
+                    ...prev,
+                    newStudent
+                ]);
+
+                // clear form
+                resetForm();
+
+                toast.success("Tạo học viên thành công!");
+
+            } else {
+                toast.error("Tạo học viên thất bại!");
+            }
+
+        } catch (error) {
+            console.error(error);
+            toast.error("Có lỗi xảy ra!");
         }
-    }
+    };
 
     const actionButton = (id) => {
         const student = students.find((student) => student.id === id);
@@ -123,8 +167,7 @@ const Students = () => {
 
     // Update a student
     const handleUpdate = async () => {
-        if (!firstName || !lastName || !phone || !dob ||
-            !birthPlace || !citizenId || !note || gender === "default") {
+        if (!firstName || !lastName || !dob || !note || gender === "default") {
             toast.warning("Vui lòng điền đầy đủ thông tin!");
             return;
         }
@@ -469,127 +512,200 @@ const Students = () => {
                         <div id="add_student" className="modal fade" role="dialog">
                             <div className="modal-dialog modal-dialog-centered">
                                 <div className="modal-content modal-lg">
+
                                     <div className="modal-header">
                                         <h4 className="modal-title">Thêm học viên</h4>
-                                        <button type="button" className="close" data-dismiss="modal">&times;</button>
+
+                                        <button
+                                            type="button"
+                                            className="close"
+                                            data-dismiss="modal"
+                                        >
+                                            &times;
+                                        </button>
                                     </div>
+
                                     <div className="modal-body">
-                                        <form>
+
+                                        <form onSubmit={handleSave}>
+
                                             <div className="row">
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label>Họ và tên lót</label>
-                                                        <input type="text" className="form-control" required
-                                                               placeholder="VD: Nguyễn Văn"
-                                                               value={lastName}
-                                                               onChange={(event) => {
-                                                                   setLastName(event.target.value);
-                                                               }}
+
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            required
+                                                            placeholder="VD: Nguyễn Văn"
+                                                            value={lastName}
+                                                            onChange={(event) => {
+                                                                setLastName(event.target.value);
+                                                            }}
                                                         />
                                                     </div>
                                                 </div>
+
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label>Tên</label>
-                                                        <input type="text" className="form-control" required
-                                                               placeholder="VD: A"
-                                                               value={firstName}
-                                                               onChange={(event) => {
-                                                                   setFirstName(event.target.value);
-                                                               }}
+
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            required
+                                                            placeholder="VD: A"
+                                                            value={firstName}
+                                                            onChange={(event) => {
+                                                                setFirstName(event.target.value);
+                                                            }}
                                                         />
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div className="row">
+
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label>Ngày sinh</label>
-                                                        <input type="date" className="form-control" required
-                                                               value={dob}
-                                                               onChange={(event) => {
-                                                                   setDob(event.target.value);
-                                                               }}
+
+                                                        <input
+                                                            type="date"
+                                                            className="form-control"
+                                                            required
+                                                            value={dob}
+                                                            onChange={(event) => {
+                                                                setDob(event.target.value);
+                                                            }}
                                                         />
                                                     </div>
                                                 </div>
-                                                <div className="col-sm-6">
-                                                    <div className="form-group">
-                                                        <label>Số điện thoại</label>
-                                                        <input type="tel" className="form-control" required
-                                                               placeholder="VD: 0989xxxx25"
-                                                               value={phone}
-                                                               onChange={(event) => {
-                                                                   setPhone(event.target.value);
-                                                               }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="row">
+
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label>Nơi sinh</label>
-                                                        <input type="text" className="form-control" required
-                                                               placeholder="VD: TP.HCM"
-                                                               value={birthPlace}
-                                                               onChange={(event) => {
-                                                                   setBirthPlace(event.target.value);
-                                                               }}
+
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            required
+                                                            placeholder="VD: TP.HCM"
+                                                            value={birthPlace}
+                                                            onChange={(event) => {
+                                                                setBirthPlace(event.target.value);
+                                                            }}
                                                         />
                                                     </div>
                                                 </div>
+
+                                            </div>
+
+                                            <div className="row">
+
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label>Giới tính</label>
+
                                                         <select
                                                             className="form-control select"
                                                             value={gender}
-                                                            onChange={(event) => setGender(Number(event.target.value))}>
-                                                            <option value="default">---Chọn giới tính---</option>
+                                                            onChange={(event) =>
+                                                                setGender(Number(event.target.value))
+                                                            }
+                                                        >
+                                                            <option value="default">
+                                                                ---Chọn giới tính---
+                                                            </option>
+
                                                             <option value={1}>Nam</option>
                                                             <option value={0}>Nữ</option>
                                                             <option value={2}>Khác</option>
                                                         </select>
                                                     </div>
                                                 </div>
+
+                                                <div className="col-sm-6">
+                                                    <div className="form-group">
+                                                        <label>Số điện thoại</label>
+
+                                                        <input
+                                                            type="tel"
+                                                            className="form-control"
+                                                            required
+                                                            placeholder="VD: 0989xxxx25"
+                                                            value={phone}
+                                                            onChange={(event) => {
+                                                                setPhone(event.target.value);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+
                                             </div>
+
                                             <div className="row">
+
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label>Số CCCD</label>
-                                                        <input type="text" className="form-control" required
-                                                               placeholder="VD: 075xxxxxxxxx"
-                                                               value={citizenId}
-                                                               onChange={(event) => {
-                                                                   setCitizenId(event.target.value);
-                                                               }}
+
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            required
+                                                            placeholder="VD: 075xxxxxxxxx"
+                                                            value={citizenId}
+                                                            onChange={(event) => {
+                                                                setCitizenId(event.target.value);
+                                                            }}
                                                         />
                                                     </div>
                                                 </div>
+
                                                 <div className="col-sm-6">
-                                                    <input type="text" className="form-control" hidden value={classId}/>
+
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        hidden
+                                                        value={classId}
+                                                        readOnly
+                                                    />
+
                                                     <div className="form-group">
                                                         <label>Ghi chú</label>
-                                                        <input type="text" className="form-control" required
-                                                               placeholder="VD: ok/ Thiếu CCCD + Hình..."
-                                                               value={note}
-                                                               onChange={(event) => {
-                                                                   setNote(event.target.value);
-                                                               }}
+
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            required
+                                                            placeholder="VD: ok/ Thiếu CCCD + Hình..."
+                                                            value={note}
+                                                            onChange={(event) => {
+                                                                setNote(event.target.value);
+                                                            }}
                                                         />
                                                     </div>
+
                                                 </div>
-                                            </div>
-                                            <div>
 
                                             </div>
+
                                             <div className="m-t-5 text-center">
-                                                <button className="btn btn-primary btn-lg mb-3"
-                                                        onClick={() => handleSave()} data-dismiss="modal">Tạo học viên
+
+                                                <button
+                                                    type="submit"
+                                                    className="btn btn-primary btn-lg mb-3"
+                                                >
+                                                    Tạo học viên
                                                 </button>
+
                                             </div>
+
                                         </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -644,20 +760,6 @@ const Students = () => {
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
-                                                        <label>Số điện thoại</label>
-                                                        <input type="tel" className="form-control" required
-                                                               placeholder="VD: 0989xxxx25"
-                                                               value={phone}
-                                                               onChange={(event) => {
-                                                                   setPhone(event.target.value);
-                                                               }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-sm-6">
-                                                    <div className="form-group">
                                                         <label>Nơi sinh</label>
                                                         <input type="text" className="form-control" required
                                                                placeholder="VD: TP.HCM"
@@ -668,6 +770,8 @@ const Students = () => {
                                                         />
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div className="row">
                                                 <div className="col-sm-6">
                                                     <div className="form-group">
                                                         <label>Giới tính</label>
@@ -680,6 +784,18 @@ const Students = () => {
                                                             <option value={0}>Nữ</option>
                                                             <option value={2}>Khác</option>
                                                         </select>
+                                                    </div>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <div className="form-group">
+                                                        <label>Số điện thoại</label>
+                                                        <input type="tel" className="form-control" required
+                                                               placeholder="VD: 0989xxxx25"
+                                                               value={phone}
+                                                               onChange={(event) => {
+                                                                   setPhone(event.target.value);
+                                                               }}
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
