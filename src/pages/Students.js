@@ -261,7 +261,11 @@ const Students = () => {
                 },
             },
         };
-
+        
+        ws["!rows"] = [
+            { hpt: 40 }
+        ];
+        
         XLSX.utils.sheet_add_json(ws, formattedData, {
             origin: "A3",
             cellDates: true,
